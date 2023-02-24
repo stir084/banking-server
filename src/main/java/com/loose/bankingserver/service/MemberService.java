@@ -1,10 +1,8 @@
 package com.loose.bankingserver.service;
 
-import com.loose.bankingserver.domain.Member;
+import com.loose.bankingserver.model.Member;
 import com.loose.bankingserver.exception.MemberAlreadyExistsException;
 import com.loose.bankingserver.repository.MemberRepository;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.loose.bankingserver.web.dto.MemberDto;
