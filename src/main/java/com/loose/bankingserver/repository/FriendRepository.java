@@ -10,9 +10,4 @@ import java.util.Optional;
 
 @Repository
 public interface FriendRepository extends JpaRepository<Friend, Long> {
-    List<Friend> findAllByFrom(Member from);
-    List<Friend> findAllByTo(Member to);
-    boolean existsByFromAndTo(Member from, Member to);
-
-    Optional<Friend> findByFromAndTo(Member from, Member to);
 }

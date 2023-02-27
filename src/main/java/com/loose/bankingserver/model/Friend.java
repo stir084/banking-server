@@ -3,30 +3,32 @@ package com.loose.bankingserver.model;
 
 import com.loose.bankingserver.exception.FriendAlreadyExistsException;
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 
 @Entity
+@Getter
+@Setter
 public class Friend {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "friend_id")
     private Member friend;
 
-    public Friend(Member from, Member to) {
+    public Friend() {}
+
+    public Friend(Member member, Member friend) {
+        this.member = member;
+        this.friend = friend;
     }
-
-    public Friend() {
-
-    }
-
-    // 생성자, getter, setter 생략
 }

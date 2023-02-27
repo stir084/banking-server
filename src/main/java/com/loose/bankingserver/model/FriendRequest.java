@@ -14,20 +14,19 @@ public class FriendRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "requester_id")
     private Member requester;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "requested_id")
     private Member requested;
 
-    @Enumerated(EnumType.STRING)
-    private FriendRequestStatus status;
+    public FriendRequest() {}
 
-    public FriendRequest(Member requester, Member requested, FriendRequestStatus pending) {
+    public FriendRequest(Member requester, Member requested) {
         this.requester = requester;
         this.requested = requested;
-        this.status = pending;
     }
+
 }
