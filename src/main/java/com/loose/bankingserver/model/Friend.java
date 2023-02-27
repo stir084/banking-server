@@ -31,4 +31,9 @@ public class Friend {
         this.member = member;
         this.friend = friend;
     }
+
+    public boolean areFriends(Member member, Member friend) {
+        return this.member.equals(member) && this.friend.equals(friend)
+                || this.member.equals(friend) && this.friend.equals(member);
+    }
 }

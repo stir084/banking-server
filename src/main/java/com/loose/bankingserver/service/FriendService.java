@@ -31,11 +31,11 @@ public class FriendService {
     private final MemberRepository memberRepository;
     private final FriendRepository friendRepository;
 
-
-    public void addFriend(String username, String friendUsername) throws MemberNotFoundException {
+    @Transactional
+    public void addFriend(String username, String friendName) throws MemberNotFoundException {
         Member member = memberRepository.findByName(username)
                 .orElseThrow(() -> new MemberNotFoundException("Member not found."));
-        Member friend = memberRepository.findByName(friendUsername)
+        Member friend = memberRepository.findByName(friendName)
                 .orElseThrow(() -> new MemberNotFoundException("Member not found."));
 
         Friend newFriend = new Friend();
@@ -44,9 +44,9 @@ public class FriendService {
         member.getFriends().add(newFriend);
         memberRepository.save(member);
     }
-
-    public List<FriendDto> getFriends(String username) throws MemberNotFoundException {
-        Member member = memberRepository.findByName(username)
+    @Transactional
+    public List<FriendDto> getFriends(String name) throws MemberNotFoundException {
+        Member member = memberRepository.findByName(name)
                 .orElseThrow(() -> new MemberNotFoundException("Member not found."));
         List<FriendDto> friendDtos = new ArrayList<>();
         List<Friend> friends = member.getFriends();
