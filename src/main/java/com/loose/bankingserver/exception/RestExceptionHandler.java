@@ -21,11 +21,12 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(FriendAlreadyExistsException.class)
     public ResponseEntity<String> handleFriendAlreadyExistsException(FriendAlreadyExistsException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(BankingException.class)
+    public ResponseEntity<String> handleBadRequestExceptions(BankingException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
-    @ExceptionHandler(FriendRequestNotFoundException.class)
-    public ResponseEntity<String> handleFriendRequestNotFoundException(FriendRequestNotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-    }
 }

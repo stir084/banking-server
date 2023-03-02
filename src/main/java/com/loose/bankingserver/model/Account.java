@@ -24,12 +24,12 @@ public class Account {
 
     private Long balance;
 
-    // 생성자, getter, setter 생략
-    public static Account createAccount(String accountNumber, Long balance) {
+    public static Account createAccount(String accountNumber, Long balance, Member member) {
         Account account = new Account();
         account.setAccountNumber(accountNumber);
         account.setBalance(balance);
-
+        account.setMember(member);
+        member.addAccount(account);
         return account;
     }
 

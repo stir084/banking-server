@@ -13,6 +13,4 @@ public class AccountDto {
         this.accountNumber = accountNumber;
         this.balance = balance;
     }
-
-    // 생성자, getter, setter 생략
 }

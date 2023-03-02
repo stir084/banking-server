@@ -4,8 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.CONFLICT)
-public class MemberAlreadyExistsException extends BankingException {
-    public MemberAlreadyExistsException(String message) {
+public class BalanceNotEnoughException extends BankingException {
+    public BalanceNotEnoughException(String message) {
         super(message);
     }
 }

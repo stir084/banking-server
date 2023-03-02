@@ -16,42 +16,32 @@ import javax.servlet.http.HttpSession;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/members")
 public class MemberController {
 
     private final MemberService memberService;
 
-    private final MemberRepository memberRepository;
-
-    @PostMapping("/signup")
+    @PostMapping("/api/v1/members/signup")
     public ResponseEntity<Void> signUp(@RequestBody MemberDto memberDto) {
         memberService.createMember(memberDto);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/login")
+    @PostMapping("/api/v1/members/login")
     public ResponseEntity<Object> login(@RequestParam("name") String name, @RequestParam("password") String password, HttpSession session) {
-
-        Member member = memberRepository.findByNameAndPassword(name, password);
-        if (member == null) {
-            return new ResponseEntity<>("Login failed", HttpStatus.UNAUTHORIZED);
+        boolean result = memberService.login(name, password, session);
+        if (result) {
+            return new ResponseEntity<>("로그인을 성공하였습니다.", HttpStatus.OK);
         } else {
-            session.setAttribute("name", member.getName());
-            return new ResponseEntity<>("Login succeeded", HttpStatus.OK);
+            return new ResponseEntity<>("로그인에 실패하였습니다.", HttpStatus.UNAUTHORIZED);
         }
     }
 
-    @PostMapping("/logout")
+    @PostMapping("/api/v1/members/logout")
     public void logout(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession(false);
         if (session != null) {
             session.invalidate();
         }
         response.setStatus(HttpServletResponse.SC_NO_CONTENT);
-    }
-
-    @GetMapping("/test")
-    public void test(HttpSession session) {
-        System.out.println(session.getAttribute("name"));
     }
 }

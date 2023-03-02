@@ -2,16 +2,18 @@ package com.loose.bankingserver.model;
 
 
 import com.loose.bankingserver.exception.FriendAlreadyExistsException;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Set;
 
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Friend {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,15 +27,22 @@ public class Friend {
     @JoinColumn(name = "friend_id")
     private Member friend;
 
-    public Friend() {}
+    public static Friend createFriend(Member me, Member you) {
+        Friend newFriend = new Friend();
+        newFriend.setMember(me);
+        newFriend.setFriend(you);
+        me.getFriends().add(newFriend);
 
-    public Friend(Member member, Member friend) {
-        this.member = member;
-        this.friend = friend;
+        return newFriend;
+    }
+    public boolean areFriends(Member sender, Member receiver) {
+        System.out.println("ddd"+sender.getName() + "fgfg" + receiver.getName());
+        return (member.equals(sender) && friend.equals(receiver)) || (member.equals(receiver) && friend.equals(sender));
     }
 
-    public boolean areFriends(Member member, Member friend) {
-        return this.member.equals(member) && this.friend.equals(friend)
-                || this.member.equals(friend) && this.friend.equals(member);
+    public void checkAlreadyFriends(Member sender, Member receiver) {
+        if (areFriends(sender, receiver)) {
+            throw new FriendAlreadyExistsException("이미 친구입니다.");
+        }
     }
 }
