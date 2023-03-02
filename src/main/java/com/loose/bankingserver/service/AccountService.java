@@ -39,7 +39,7 @@ public class AccountService {
     }
 
     @Transactional
-    public void transfer(String senderName, String receiverName, Long amount) {
+    public void transfer(String senderName, String receiverName, Long amount) throws InterruptedException {
 
         Member sender = memberRepository.findByName(senderName)
                 .orElseThrow(() -> new MemberNotFoundException("회원을 찾을 수 없습니다."));
@@ -73,5 +73,11 @@ public class AccountService {
 
         accountRepository.save(senderAccount);
         accountRepository.save(receiverAccount);
+
+        notify(receiver, "이체가 완료 되었습니다.");
+    }
+
+    public void notify(Member member, String message) throws InterruptedException {
+        Thread.sleep(500);
     }
 }

@@ -66,7 +66,7 @@ public class AccountServiceTest {
     @Test
     @DisplayName("계좌 이체 성공 테스트")
     void testTransferSuccess() throws MemberNotFoundException,
-            BalanceNotEnoughException, NotFriendsException {
+            BalanceNotEnoughException, NotFriendsException, InterruptedException {
         // given
         Member sender = new Member("juhno", "1234");
         Member receiver = new Member("loose", "1234");

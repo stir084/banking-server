@@ -30,7 +30,7 @@ public class AccountController {
             @PathVariable("senderName") String senderName,
             @PathVariable("receiverName") String receiverName,
             @RequestParam("amount") long amount
-    ) {
+    ) throws InterruptedException {
         accountService.transfer(senderName, receiverName, amount);
         return ResponseEntity.ok("이체가 완료되었습니다.");
     }
