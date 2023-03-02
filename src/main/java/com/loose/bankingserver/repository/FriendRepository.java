@@ -10,4 +10,5 @@ import java.util.Optional;
 
 @Repository
 public interface FriendRepository extends JpaRepository<Friend, Long> {
+    Optional<Friend> findByMemberAndFriend(Member sender, Member receiver);
 }

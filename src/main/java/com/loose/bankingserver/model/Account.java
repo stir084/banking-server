@@ -32,4 +32,16 @@ public class Account {
 
         return account;
     }
+
+    public void deposit(Long amount) {
+        this.balance += amount;
+    }
+
+    public boolean withdraw(Long amount) {
+        if (this.balance >= amount) {
+            this.balance -= amount;
+            return true;
+        }
+        return false;
+    }
 }

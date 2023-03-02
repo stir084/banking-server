@@ -4,8 +4,8 @@ import com.loose.bankingserver.repository.AccountRepository;
 import com.loose.bankingserver.service.AccountService;
 import com.loose.bankingserver.web.dto.AccountDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -23,5 +23,15 @@ public class AccountController {
         List<AccountDto> accounts = accountService.getMyAccounts(name);
 
         return accounts;
+    }
+
+    @PostMapping("/{senderName}/transfer/{receiverName}")
+    public ResponseEntity<?> transfer(
+            @PathVariable("senderName") String senderName,
+            @PathVariable("receiverName") String receiverName,
+            @RequestParam("amount") long amount
+    ) {
+        accountService.transfer(senderName, receiverName, amount);
+        return ResponseEntity.ok("Money transferred successfully");
     }
 }
