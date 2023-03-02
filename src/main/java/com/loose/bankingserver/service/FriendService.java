@@ -1,5 +1,6 @@
 package com.loose.bankingserver.service;
 
+import com.loose.bankingserver.exception.FriendAlreadyExistsException;
 import com.loose.bankingserver.exception.MemberNotFoundException;
 import com.loose.bankingserver.model.Friend;
 import com.loose.bankingserver.model.Member;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -25,8 +27,12 @@ public class FriendService {
         Member you = memberRepository.findByName(friendName)
                 .orElseThrow(() -> new MemberNotFoundException("회원을 찾을 수 없습니다."));
 
+
+        if (me.getFriends().stream().anyMatch(friend -> friend.getFriend().equals(you))) {
+            throw new FriendAlreadyExistsException("이미 친구입니다.");
+        }
+
         Friend newFriend = Friend.createFriend(me, you);
-        newFriend.checkAlreadyFriends(me, you);
         friendRepository.save(newFriend);
 
     }

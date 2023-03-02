@@ -1,6 +1,6 @@
 package com.loose.bankingserver.service;
 
-import com.loose.bankingserver.exception.AcoountNotFoundException;
+import com.loose.bankingserver.exception.AccountNotFoundException;
 import com.loose.bankingserver.exception.BalanceNotEnoughException;
 import com.loose.bankingserver.exception.MemberNotFoundException;
 import com.loose.bankingserver.exception.NotFriendsException;
@@ -49,19 +49,20 @@ public class AccountService {
         List<Account> senderAccounts = accountRepository.findByMember(sender);
         List<Account> receiverAccounts = accountRepository.findByMember(receiver);
 
+        friendRepository.findByMemberAndFriend(sender, receiver)
+                .orElseThrow(() -> new NotFriendsException("송금자와 수취인이 친구가 아닙니다."));
+
         if (senderAccounts.isEmpty()) {
-            throw new AcoountNotFoundException("송금자의 계좌가 존재하지 않습니다.");
+            throw new AccountNotFoundException("송금자의 계좌가 존재하지 않습니다.");
         }
 
         if (receiverAccounts.isEmpty()) {
-            throw new AcoountNotFoundException("수취인의 계좌가 존재하지 않습니다.");
+            throw new AccountNotFoundException("수취인의 계좌가 존재하지 않습니다.");
         }
 
         Account senderAccount = senderAccounts.get(0);
         Account receiverAccount = receiverAccounts.get(0);
 
-        friendRepository.findByMemberAndFriend(sender, receiver)
-                .orElseThrow(() -> new NotFriendsException("송금자와 수취인이 친구가 아닙니다."));
 
         if (senderAccount.getBalance() < amount) {
             throw new BalanceNotEnoughException("송금자의 계좌의 잔액이 부족합니다.");

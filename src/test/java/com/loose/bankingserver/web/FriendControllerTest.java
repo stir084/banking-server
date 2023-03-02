@@ -3,6 +3,7 @@ package com.loose.bankingserver.web;
 import com.loose.bankingserver.service.FriendService;
 import com.loose.bankingserver.web.dto.FriendDto;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -36,9 +37,10 @@ class FriendControllerTest {
     private FriendService friendService;
 
     @Test
+    @DisplayName("친구 목록 조회 API Test")
     void getFriendsTest() throws Exception {
         MockHttpSession httpSession = new MockHttpSession();
-        String name = "testuser";
+        String name = "junho";
         List<FriendDto> friendDtoList = new ArrayList<>();
         when(friendService.getFriends(name)).thenReturn(friendDtoList);
         mockMvc.perform(get("/api/v1/friends")
@@ -48,10 +50,11 @@ class FriendControllerTest {
     }
 
     @Test
+    @DisplayName("친구 추가 Api Test")
     void addFriendTest() throws Exception {
         MockHttpSession httpSession = new MockHttpSession();
-        String name = "testuser";
-        String friendName = "friend";
+        String name = "junho";
+        String friendName = "loose";
         doNothing().when(friendService).addFriend(name, friendName);
         mockMvc.perform(post("/api/v1/friends")
                         .session(httpSession)

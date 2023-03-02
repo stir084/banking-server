@@ -31,7 +31,7 @@ class MemberServiceTest {
     @DisplayName("기존에 존재하는 회원이 아닐 때 회원 생성이 정상적으로 이루어진다.")
     void createMember() {
         // given
-        MemberDto memberDto = new MemberDto("testuser", "testpassword");
+        MemberDto memberDto = new MemberDto("junho", "1234");
         when(memberRepository.findByName(memberDto.getName())).thenReturn(Optional.empty());
         when(memberRepository.save(any(Member.class))).thenReturn(null);
 
@@ -47,7 +47,7 @@ class MemberServiceTest {
     @DisplayName("이미 존재하는 회원일 때 MemberAlreadyExistsException이 발생한다.")
     void createMember_whenMemberAlreadyExists() {
         // given
-        MemberDto memberDto = new MemberDto("testuser", "testpassword");
+        MemberDto memberDto = new MemberDto("junho", "1234");
         when(memberRepository.findByName(memberDto.getName())).thenReturn(Optional.of(Member.createMember(memberDto.getName(), memberDto.getPassword())));
 
         // when, then
@@ -60,8 +60,8 @@ class MemberServiceTest {
     @DisplayName("이미 존재하는 회원일 때 true를 반환한다.")
     void isExistingMember_whenMemberExists() {
         // given
-        String name = "testuser";
-        when(memberRepository.findByName(name)).thenReturn(Optional.of(Member.createMember(name, "testpassword")));
+        String name = "junho";
+        when(memberRepository.findByName(name)).thenReturn(Optional.of(Member.createMember(name, "1234")));
 
         // when
         boolean result = memberService.isExistingMember(name);
@@ -75,7 +75,7 @@ class MemberServiceTest {
     @DisplayName("존재하지 않는 회원일 때 false를 반환한다.")
     void isExistingMember_whenMemberNotExists() {
         // given
-        String name = "testuser";
+        String name = "junho";
         when(memberRepository.findByName(name)).thenReturn(Optional.empty());
 
         // when
@@ -90,8 +90,8 @@ class MemberServiceTest {
     @DisplayName("회원이 존재하고 비밀번호가 일치할 때 true를 반환한다.")
     void login_whenMemberExists() {
         // given
-        String name = "testuser";
-        String password = "testpassword";
+        String name = "junho";
+        String password = "1234";
         HttpSession httpSession = mock(HttpSession.class);
         Member member = Member.createMember(name, password);
         when(memberRepository.findByNameAndPassword(name, password)).thenReturn(member);
@@ -108,8 +108,8 @@ class MemberServiceTest {
     @DisplayName("회원이 존재하지 않거나 비밀번호가 일치하지 않을 때 MemberNotFoundException이 발생한다.")
     void login_whenMemberNotExists() {
         // given
-        String name = "testuser";
-        String password = "testpassword";
+        String name = "junho";
+        String password = "1234";
         HttpSession httpSession = mock(HttpSession.class);
         when(memberRepository.findByNameAndPassword(name, password)).thenReturn(null);
 

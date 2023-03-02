@@ -35,14 +35,4 @@ public class Friend {
 
         return newFriend;
     }
-    public boolean areFriends(Member sender, Member receiver) {
-        System.out.println("ddd"+sender.getName() + "fgfg" + receiver.getName());
-        return (member.equals(sender) && friend.equals(receiver)) || (member.equals(receiver) && friend.equals(sender));
-    }
-
-    public void checkAlreadyFriends(Member sender, Member receiver) {
-        if (areFriends(sender, receiver)) {
-            throw new FriendAlreadyExistsException("이미 친구입니다.");
-        }
-    }
 }

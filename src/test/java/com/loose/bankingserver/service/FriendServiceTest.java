@@ -39,8 +39,8 @@ public class FriendServiceTest {
     @DisplayName("친구 추가 - 회원이 존재하지 않을 경우")
     void addFriend_memberNotFound() {
         // given
-        String username = "john";
-        String friendName = "jane";
+        String username = "junho";
+        String friendName = "loose";
 
         when(memberRepository.findByName(username)).thenReturn(Optional.of(new Member(username, "1234")));
         when(memberRepository.findByName(friendName)).thenReturn(Optional.empty());
@@ -58,10 +58,10 @@ public class FriendServiceTest {
     @DisplayName("친구 추가 - 이미 친구인 경우")
     void addFriend_alreadyFriend() {
         // given
-        String username = "john";
-        String friendName = "jane";
-        Member john = new Member("john", "1234");
-        Member jane = new Member("jane", "1234");
+        String username = "junho";
+        String friendName = "loose";
+        Member john = new Member("junho", "1234");
+        Member jane = new Member("loose", "1234");
         Friend friend = Friend.createFriend(john, jane);
 
         when(memberRepository.findByName(anyString())).thenReturn(Optional.of(john), Optional.of(jane));
@@ -72,26 +72,24 @@ public class FriendServiceTest {
 
     }
 
-
     @Test
     @DisplayName("친구 추가 - 친구 추가에 성공한 경우")
-    void addFriend_success() {
+    void addFriend_success() throws MemberNotFoundException, FriendAlreadyExistsException {
         // given
-        String username = "john";
-        String friendName = "jane";
-        Member john = new Member("john", "1234");
-        Member jane = new Member("jane", "1234");
+        Member me = new Member("junho", "1234");
+        Member you = new Member("loose", "1234");
 
-        when(memberRepository.findByName(anyString())).thenReturn(Optional.of(john), Optional.of(jane));
-        when(friendRepository.findByMemberAndFriend(any(Member.class), any(Member.class))).thenReturn(Optional.empty());
+        when(memberRepository.findByName("junho")).thenReturn(Optional.of(me));
+        when(memberRepository.findByName("loose")).thenReturn(Optional.of(you));
+        when(friendRepository.save(any(Friend.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        // when
-        friendService.addFriend(username, friendName);
+        // When
+        friendService.addFriend("junho", "loose");
 
-        // then
-        verify(memberRepository, times(2)).findByName(anyString());
-        verify(friendRepository, times(1)).findByMemberAndFriend(any(Member.class), any(Member.class));
-        verify(friendRepository, times(1)).save(any(Friend.class));
+        // Then
+        verify(memberRepository).findByName("junho");
+        verify(memberRepository).findByName("loose");
+        verify(friendRepository).save(any(Friend.class));
     }
 
 
@@ -99,8 +97,8 @@ public class FriendServiceTest {
     @DisplayName("친구 목록 조회 - 친구가 없는 경우")
     void getFriends_noFriend() {
         // given
-        String username = "john";
-        Member john = new Member("john", "1234");
+        String username = "junho";
+        Member john = new Member("junho", "1234");
 
         when(memberRepository.findByName(anyString())).thenReturn(Optional.of(john));
 
@@ -112,14 +110,13 @@ public class FriendServiceTest {
 
     }
 
-
-    @DisplayName("친구 목록 조회 - 친구가 있는 경우")
     @Test
+    @DisplayName("친구 목록 조회 - 친구가 있는 경우")
     void getFriends_withFriend() {
         // given
-        String username = "john";
-        Member john = new Member("john", "1234");
-        Member jane = new Member("jane", "1234");
+        String username = "junho";
+        Member john = new Member("junho", "1234");
+        Member jane = new Member("loose", "1234");
         Friend friend = Friend.createFriend(john, jane);
 
         when(memberRepository.findByName(anyString())).thenReturn(Optional.of(john));

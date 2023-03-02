@@ -40,8 +40,8 @@ class MemberControllerTest {
     @Test
     @DisplayName("회원 가입 API 테스트")
     void testSignUp() throws Exception {
-        String name = "testuser";
-        String password = "password";
+        String name = "junho";
+        String password = "1234";
         MemberDto memberDto = new MemberDto();
         memberDto.setName(name);
         memberDto.setPassword(password);

@@ -6,10 +6,14 @@ import com.loose.bankingserver.web.dto.AccountDto;
 import com.loose.bankingserver.web.dto.FriendDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockHttpSession;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import javax.servlet.http.HttpSession;
@@ -22,8 +26,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+
 @WebMvcTest(AccountController.class)
-class AccountControllerTest {
+public class AccountControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
@@ -34,7 +39,7 @@ class AccountControllerTest {
     @DisplayName("내 계좌 조회 - 성공")
     void getMyAccountsTest() throws Exception {
         MockHttpSession httpSession = new MockHttpSession();
-        String name = "testuser";
+        String name = "junho";
         List<AccountDto> accountDtoList = new ArrayList<>();
         when(accountService.getMyAccounts(name)).thenReturn(accountDtoList);
 
@@ -47,8 +52,8 @@ class AccountControllerTest {
     @Test
     @DisplayName("송금 - 성공")
     void transferTest() throws Exception {
-        String senderName = "sender";
-        String receiverName = "receiver";
+        String senderName = "junho";
+        String receiverName = "loose";
         long amount = 1000;
 
         mockMvc.perform(post("/api/v1/" + senderName + "/transfer/" + receiverName)
