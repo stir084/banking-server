@@ -1,20 +1,11 @@
 package com.loose.bankingserver.web;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import javax.servlet.http.HttpSession;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loose.bankingserver.exception.MemberNotFoundException;
-import com.loose.bankingserver.model.Member;
 import com.loose.bankingserver.service.MemberService;
 import com.loose.bankingserver.web.dto.MemberDto;
 import org.junit.jupiter.api.DisplayName;
