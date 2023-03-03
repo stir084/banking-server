@@ -37,9 +37,6 @@ public class AccountServiceTest {
     @Mock
     private MemberRepository memberRepository;
 
-    @Mock
-    private FriendRepository friendRepository;
-
     @InjectMocks
     private AccountService accountService;
 
@@ -73,11 +70,13 @@ public class AccountServiceTest {
         Account account1 = Account.createAccount("123456789", 10000L, sender);
         Account account2 = Account.createAccount("987654321", 10000L, receiver);
 
+        Friend friend1 = Friend.createFriend(sender, receiver);
+        Friend friend2 = Friend.createFriend(receiver, sender);
+        sender.getFriends().add(friend1);
+        receiver.getFriends().add(friend2);
+
         when(memberRepository.findByName(sender.getName())).thenReturn(Optional.of(sender));
         when(memberRepository.findByName(receiver.getName())).thenReturn(Optional.of(receiver));
-        when(accountRepository.findByMember(sender)).thenReturn(Collections.singletonList(account1));
-        when(accountRepository.findByMember(receiver)).thenReturn(Collections.singletonList(account2));
-        when(friendRepository.findByMemberAndFriend(sender, receiver)).thenReturn(Optional.of(Friend.createFriend(sender, receiver)));
 
         // when
         accountService.transfer(sender.getName(), receiver.getName(), 5000L);
@@ -96,7 +95,6 @@ public class AccountServiceTest {
 
         when(memberRepository.findByName(sender.getName())).thenReturn(Optional.of(sender));
         when(memberRepository.findByName(receiver.getName())).thenReturn(Optional.of(receiver));
-        when(friendRepository.findByMemberAndFriend(sender, receiver)).thenReturn(Optional.empty());
 
         // when & then
         assertThrows(NotFriendsException.class, () -> accountService.transfer(sender.getName(), receiver.getName(), 5000L));
@@ -125,13 +123,13 @@ public class AccountServiceTest {
         Account senderAccount = Account.createAccount("1234", 10000L, sender);
         Account receiverAccount = Account.createAccount("5678", 0L, receiver);
 
-        Friend friend = Friend.createFriend(sender, receiver);
+        Friend friend1 = Friend.createFriend(sender, receiver);
+        Friend friend2 = Friend.createFriend(receiver, sender);
+        sender.getFriends().add(friend1);
+        receiver.getFriends().add(friend2);
 
         when(memberRepository.findByName(sender.getName())).thenReturn(Optional.of(sender));
         when(memberRepository.findByName(receiver.getName())).thenReturn(Optional.of(receiver));
-        when(friendRepository.findByMemberAndFriend(sender, receiver)).thenReturn(Optional.of(friend));
-        when(accountRepository.findByMember(sender)).thenReturn(List.of(senderAccount));
-        when(accountRepository.findByMember(receiver)).thenReturn(List.of(receiverAccount));
 
         // when, then
         assertThrows(BalanceNotEnoughException.class, () -> {
@@ -140,9 +138,5 @@ public class AccountServiceTest {
 
         verify(memberRepository, times(1)).findByName(sender.getName());
         verify(memberRepository, times(1)).findByName(receiver.getName());
-        verify(friendRepository, times(1)).findByMemberAndFriend(sender, receiver);
-        verify(accountRepository, times(1)).findByMember(sender);
-        verify(accountRepository, times(1)).findByMember(receiver);
-        verify(accountRepository, never()).save(any(Account.class));
     }
 }

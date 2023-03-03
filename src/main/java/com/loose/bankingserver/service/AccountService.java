@@ -46,11 +46,16 @@ public class AccountService {
         Member receiver = memberRepository.findByName(receiverName)
                 .orElseThrow(() -> new MemberNotFoundException("회원을 찾을 수 없습니다."));
 
-        List<Account> senderAccounts = accountRepository.findByMember(sender);
-        List<Account> receiverAccounts = accountRepository.findByMember(receiver);
+        boolean areFriends = sender.getFriends().stream()
+                .anyMatch(friend -> friend.getFriend().equals(receiver))
+                && receiver.getFriends().stream()
+                .anyMatch(friend -> friend.getFriend().equals(sender));
 
-        friendRepository.findByMemberAndFriend(sender, receiver)
-                .orElseThrow(() -> new NotFriendsException("송금자와 수취인이 친구가 아닙니다."));
+        if(areFriends == false){
+            throw new NotFriendsException("송금자와 수취인이 친구가 아닙니다.");
+        }
+        List<Account> senderAccounts = sender.getAccounts();
+        List<Account> receiverAccounts = receiver.getAccounts();
 
         if (senderAccounts.isEmpty()) {
             throw new AccountNotFoundException("송금자의 계좌가 존재하지 않습니다.");
